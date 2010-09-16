@@ -15,4 +15,6 @@
     </application>
     <uses-sdk android:minSdkVersion="8" />
 
+	<!--You'll need to be granted this permission before you can use the services. -->
+	<uses-permission android:name="com.vodafone360.people.service.aidl.permission.FullAccess"></uses-permission>
 </manifest> 

@@ -14,10 +14,28 @@ import android.util.Log;
 
 import com.vodafone360.people.service.aidl.IDatabaseSubscriber;
 import com.vodafone360.people.service.aidl.IDatabaseSubscriptionService;
+import com.vodafone360.thirdparty.R;
 
 /**
- * A quick and dirty demo for talking to the
+ * <p>A quick and dirty demo for talking to the
  * Vodafone360 People services via AIDL.
+ * 
+ * <p>This is a reasonable way to drop head-first
+ * into making your own processes which will
+ * make use of the new IPC APIs from
+ * Vodafone 360 People. The steps taken in this
+ * program are pretty much the steps that any
+ * program will have to take in order to make use
+ * of these APIs, so it's worth having a good look
+ * through.
+ * 
+ * <p>Things to note for all applications using these APIs:
+ * <li> You need to link against clientDepends.jar
+ * <li> You need to add the following line to your
+ * AndroidManifest.xml file:
+ * 
+ * <uses-permission android:name="com.vodafone360.people.service.aidl.permission.FullAccess"></uses-permission>
+ * 
  * @author james
  *
  */
@@ -34,7 +52,7 @@ public class HelloAidl extends Activity {
         // We won't be putting anything onto the user interface.
         setContentView(R.layout.main);
         
-        // Dead with talking to the database
+        // Ask to get callbacks from the database
         registerForEventCallbacks();
         
         // Demo querying the database
