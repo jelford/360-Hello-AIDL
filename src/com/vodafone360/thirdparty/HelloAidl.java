@@ -1,3 +1,30 @@
+/*
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the Common Development
+ * and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
+ *
+ * You can obtain a copy of the license at
+ * src/com/vodafone360/thirdparty/VODAFONE.LICENSE.txt or
+ * http://github.com/360/360-Engine-for-Android
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each file and
+ * include the License file at
+ * src/com/vodafone360/thirdparty/VODAFONE.LICENSE.txt.
+ *
+ * If applicable, add the following below this CDDL HEADER, with the fields
+ * enclosed by brackets "[]" replaced with your own identifying information:
+ * Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ *
+ * Copyright 2010 Vodafone Sales & Services Ltd.  All rights reserved.
+ * Use is subject to license terms.
+ */
+
 package com.vodafone360.thirdparty;
 
 import android.app.Activity;
@@ -17,35 +44,35 @@ import com.vodafone360.people.service.aidl.IDatabaseSubscriber;
 import com.vodafone360.people.service.aidl.IDatabaseSubscriptionService;
 
 /**
- * <p>A quick and dirty demo for talking to the
- * Vodafone360 People services via AIDL.
+ * <p>A quick and dirty demo for talking to the Vodafone360 People services
+ * via AIDL.
  *
- * <p>This is a reasonable way to drop head-first
- * into making your own processes which will
- * make use of the new IPC APIs from
- * Vodafone 360 People. The steps taken in this
- * program are pretty much the steps that any
- * program will have to take in order to make use
- * of these APIs, so it's worth having a good look
- * through.
+ * <p>This is a reasonable way to drop head-first into making your own
+ * processes which will make use of the new IPC APIs from Vodafone 360 People.
+ * The steps taken in this program are pretty much the steps that any program
+ * will have to take in order to make use of these APIs, so it's worth having a
+ * good look through.
  *
  * <p>Things to note for all applications using these APIs:
  * <li> You need to link against clientDepends.jar
- * <li> You need to add the following line to your
- * AndroidManifest.xml file:
- * 
- * <uses-permission android:name="com.vodafone360.people.service.aidl.permission.FullAccess"></uses-permission>
- * 
+ * <li> You need to add the following line to your AndroidManifest.xml file:
+ *
+ * <uses-permission
+ *  android:name="com.vodafone360.people.service.aidl.permission.FullAccess"/>
  *
  */
 public class HelloAidl extends Activity {
 
-    /** How would we like to appear in the log? **/
-    private static final String TAG = "HelloAIDL";
+    /** LogCat Tag. **/
+    private static final String TAG = "HelloAidl";
 
-    /** Called when the activity is first created. */
+    /***
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState Activity state Bundle.
+     */
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    public final void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // We won't be putting anything onto the user interface.
@@ -67,12 +94,12 @@ public class HelloAidl extends Activity {
      */
     private void queryTheDatabase() {
         // This is how we communicate with the 360 People ContentProvider
-        final Uri PROVIDER_URI =
-            Uri.parse(com.vodafone360.people.service.aidl.Intents.DATABASE_URI);
+        final Uri PROVIDER_URI = Uri.parse(
+                com.vodafone360.people.service.aidl.Intents.DATABASE_URI);
 
         // We are interested in the Activities table from the database
-        final Uri activitiesUri =
-            Uri.withAppendedPath(PROVIDER_URI, "Activities");
+        final Uri activitiesUri = Uri.withAppendedPath(PROVIDER_URI, 
+                                    "Activities");
 
         Cursor activitiesCursor = null;
         // Simply query the database, as we would with any content provider
@@ -123,12 +150,10 @@ public class HelloAidl extends Activity {
          *  further in this situation, so just print an error and return.
          */
         if (activitiesCursor == null) {
-            Log.e(TAG, "Shouldn't have got a null pointer back from the database;" +
-            " address this!");
-            Log.e(TAG, "Possible causes for getting Null back from the database:" +
-                    " · passing an invalid table name to the database" +
-            " · invalid permissions to read the database (correct signature)?");
-
+            Log.e(TAG, "HelloAidl.queryTheDatabase() Shouldn't have got a "
+                    + "NULL pointer back from the database.  Check to see if "
+                    + "com.vodafone360.people.Settings.ENABLE_AIDL_DEFAULT in "
+                    + "the Engine code is set to true");
             return;
         }
 
@@ -157,44 +182,43 @@ public class HelloAidl extends Activity {
     }
 
     /**
-     * Demonstrates how to connect to the database so that
-     * we can receive event callbacks & send commands.
+     * Demonstrates how to connect to the database so that we can receive event
+     * callbacks & send commands.
      *
-     * Below this function live some member variables that
-     * are required to make this work.
+     * Below this function live some member variables that are required to make
+     * this work.
      */
     private void registerForEventCallbacks() {
         Intent serviceIntent =
             com.vodafone360.people.service.aidl.Intents.SERVICE_INTENT;
 
         /*
-         * Start the service before we try to bind to it
-         * as as this is less likely to fail without telling us.
+         * Start the service before we try to bind to it as as this is less
+         * likely to fail without telling us.
          */
         startService(serviceIntent);
 
         /*
-         * Ask Android to bind us to this service. mServiceConnection
-         * will get called when we have successfully bound, where we
-         * will be given a handle to the bits of code we can call in
-         * the server.
+         * Ask Android to bind us to this service. mServiceConnection will get
+         * called when we have successfully bound, where we will be given a
+         * handle to the bits of code we can call in the server.
          */
         if (!bindService(serviceIntent, mServiceConnection, 0)) {
             // This would be bad.
-            Log.e(TAG, "Failed to bind to the IPC Service!");
+            Log.e(TAG, "HelloAidl.registerForEventCallbacks() "
+                    + "Failed to bind to the IPC Service!");
         }
     }
 
     /**
-     * This will be our handle into the engine code. Anything
-     * we want to do, we'll do it with this.
+     * This will be our handle into the engine code. Anything we want to do,
+     * we'll do it with this.
      */
     private IDatabaseSubscriptionService mPeopleService;
 
     /**
-     * We use this to uniquely identify ourselves to the
-     * 360 People client. If you use it again, you'll
-     * override the first entry.
+     * We use this to uniquely identify ourselves to the 360 People client. If
+     * you use it again, you'll override the first entry.
      */
     private static final String SUBSCRIPTION_IDENTIFIER =
         "com.vodafone360.thirdparty.HelloAidl";
@@ -204,7 +228,7 @@ public class HelloAidl extends Activity {
      * gets on our code. The People Client directly calls code in here to let
      * us know what's going on.
      */
-    IDatabaseSubscriber mSubscriber = new IDatabaseSubscriber.Stub() {
+    private IDatabaseSubscriber mSubscriber = new IDatabaseSubscriber.Stub() {
 
         @Override
         public void handleEvent(Message msg) throws RemoteException {
@@ -251,8 +275,8 @@ public class HelloAidl extends Activity {
                 final IBinder service) {
             /* 
              * "service" is the IBinder returned by the IPC code within the
-             * engine. We turn this into an IDatabaseSubscriptionService
-             * which gives us a handle into the engine
+             * engine. We turn this into an IDatabaseSubscriptionService which
+             * gives us a handle into the engine.
              */
             mPeopleService =
                 IDatabaseSubscriptionService.Stub.asInterface(service);
@@ -261,33 +285,35 @@ public class HelloAidl extends Activity {
              * All calls to the mPeopleService have to be wrapped in
              * try/catch(RemoteException) blocks.
              */
-            try{
-                if (mPeopleService.subscribe(SUBSCRIPTION_IDENTIFIER, mSubscriber)) {
+            try {
+                if (mPeopleService.subscribe(SUBSCRIPTION_IDENTIFIER,
+                        mSubscriber)) {
                     /*
-                     *  If the call to subscribe returns true, then the service
-                     *  is ready for us to make calls.
+                     * If the call to subscribe returns true, then the service
+                     * is ready for us to make calls.
                      */
                     mSubscriber.onServiceReady();
                 } else {
                     /*
-                     *  If the call to subscribe returns false, then the
-                     *  service is not yet ready to receive calls. It will call
-                     *  mSubscriber.onServiceReady() when it is.
+                     * If the call to subscribe returns false, then the service
+                     * is not yet ready to receive calls. It will call
+                     * mSubscriber.onServiceReady() when it is.
                      */
-                    Log.i(TAG, "The 360 People Client isn't yet ready for us " +
-                    "to make calls yet - we'll get a callback when it is.");
+                    Log.i(TAG, "HelloAidl.onServiceConnected() The 360 People "
+                            + "Client isn't yet ready for us to make calls yet"
+                            + " - we'll get a callback when it is.");
                 }
-            } catch (RemoteException e){
-                Log.e(TAG, "Got a RemoteException trying to subscribe" +
-                " to the service; uh oh!");
+            } catch (RemoteException e) {
+                Log.e(TAG, "HelloAidl.onServiceConnected() Got a "
+                        + "RemoteException trying to subscribe to the service;"
+                        + " uh oh!");
             }
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
+        public void onServiceDisconnected(final ComponentName name) {
             unbindService(this);
             mPeopleService = null;
         }
-
     };
 }

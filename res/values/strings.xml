@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, HelloAidl!</string>
+    <string name="hello">Hello AIDL World, check LogCat output for info.</string>
     <string name="app_name">360 Hello AIDL</string>
 </resources>
