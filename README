@@ -6,6 +6,7 @@ The external APIs are provided by the 360 People engines as a way for developers
 to interface with the engines and their capabilities from external services.
 
 The APIs are provided in two forms: 
+
  * A ContentProvider which provides unfetted access to all the data stored by
  the internal database
  * An AIDL service which allows external services to send commands and request
@@ -13,6 +14,7 @@ The APIs are provided in two forms:
  
 Between these two interfaces, we've tried to expose as much of the internal
 functionality as possible. Use cases for these APIs already include:
+
  * Novel presentation of "Activities" data such as status updates from social
  networks.
  * New chat client functionality.
@@ -25,6 +27,7 @@ AIDL remote services ([here](http://is.gd/foQp2) [and here](http://is.gd/foQrI) 
 
 After that, there are a few things to note, and then you should plough straight
 into the code:
+
  * The main interface (referred to in the sample code here as mPeopleService -
  which is of type IDatabaseSubscriptionService) tries its best to stick to
  implementing com.vodafone360.people.service.interfaces.IPeopleService, with
