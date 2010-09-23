@@ -1,0 +1,56 @@
+# Making use of the external APIs in 360 People #
+
+## Introduction to the interfaces ##
+
+The external APIs are provided by the 360 People engines as a way for developers
+to interface with the engines and their capabilities from external services.
+
+The APIs are provided in two forms: 
+ * A ContentProvider which provides unfetted access to all the data stored by
+ the internal database
+ * An AIDL service which allows external services to send commands and request
+ data which is unavailable via the ContentProvider interface.
+ 
+Between these two interfaces, we've tried to expose as much of the internal
+functionality as possible. Use cases for these APIs already include:
+ * Novel presentation of "Activities" data such as status updates from social
+ networks.
+ * New chat client functionality.
+ 
+## Using the APIs ##
+
+Before you start trying to get this working yourself you should probably take a
+quick look through the official documentation for both ContentProviders and
+AIDL remote services ([here](http://is.gd/foQp2) [and here](http://is.gd/foQrI) respectively).
+
+After that, there are a few things to note, and then you should plough straight
+into the code:
+ * The main interface (referred to in the sample code here as mPeopleService -
+ which is of type IDatabaseSubscriptionService) tries its best to stick to
+ implementing com.vodafone360.people.service.interfaces.IPeopleService, with
+ the addition of a few helper methods to make our lives easier. See official
+ documentation for how to use this, or if you have access look through the
+ UI code for more complex examples of what you can do.
+ * The ContentProvider works just like most standard ContentProviders in
+ the Android system. You should note, though, that the "path" part of the
+ querying URI tells it which *table* you would like to query against in the
+ database. Again, check the official documentation for information on which
+ tables are available to you, or look in the package
+ com.vodafone360.people.database.tables . In the current implementation, you
+ are allowed *read access only* to *all* tables within the database.
+ * For a more complex example of how you can make use of these APIs, check
+ the implementation of Chat functionality using embedded webviews in the
+ project at git@git.vodafone.com:FlashApk.git . Note: this is not a
+ stock documentation project, and there are no guarantees as to the quality
+ of the code or comments!
+
+
+<style>
+body {
+	font-family:helvetica,sans;
+	font-size:1em;
+	max-width:80em;
+	margin-left:auto;
+	margin-right:auto;
+}
+</style>
